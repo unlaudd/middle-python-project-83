@@ -8,7 +8,7 @@
 
 Приложение развернуто на [Render.com](https://render.com) и доступно по адресу:
 
-**[https://page-analyzer.onrender.com](#)** _(ссылка будет обновлена после деплоя)_
+**[https://middle-python-project-83-12h7.onrender.com](#)**
 
 ## Описание
 
