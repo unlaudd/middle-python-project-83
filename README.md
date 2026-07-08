@@ -3,16 +3,81 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=unlaudd_middle-python-project-83&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=unlaudd_middle-python-project-83)
 
 # Page Analyzer
-Анализатор страниц — веб-приложение для SEO-анализа URL-адресов, созданное в рамках обучения на Хекслете.
+
+Анализатор страниц — веб-приложение для SEO-анализа URL-адресов.
 
 ## Демо
 
-Приложение развернуто на [Render.com](https://render.com) и доступно по адресу:
+https://middle-python-project-83-12h7.onrender.com
 
-**[https://middle-python-project-83-12h7.onrender.com](#)**
+## Возможности
 
-## Описание
+- Добавление URL для анализа
+- Проверка доступности сайта (HTTP-запрос)
+- Извлечение SEO-метаданных: title, h1, meta description
+- История проверок для каждого URL
+- Валидация URL-адресов
+- Отображение кодов ответа сервера
 
-Приложение позволяет проверять веб-страницы на пригодность для SEO-оптимизации. Пользователь вводит URL, и система анализирует страницу, собирая метаданные, заголовки, описание и другие параметры.
+## Технологии
 
->**Текущий статус:** Проект находится на начальной стадии разработки. Базовая структура развернута, функционал будет добавляться в следующих итерациях.
+- Python 3.12
+- Flask
+- PostgreSQL
+- psycopg
+- BeautifulSoup4
+- requests
+- Bootstrap 5
+- Gunicorn
+- uv (package manager)
+
+## Установка
+
+```bash
+git clone https://github.com/unlaudd/middle-python-project-83.git
+cd middle-python-project-83
+make install
+```
+
+## Использование
+
+### Переменные окружения
+Создайте файл .env в корне проекта:
+
+```env
+SECRET_KEY=your-secret-key
+DATABASE_URL=postgresql://user:password@localhost:5432/page_analyzer
+```
+
+## Запуск
+Локальная разработка:
+
+```bash
+make dev
+```
+
+Приложение доступно по адресу: `http://localhost:8000`
+
+## Проверка кода
+
+```bash
+make lint
+```
+
+## Структура проекта
+
+```
+.
+├── page_analyzer/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── checker.py
+│   ├── db.py
+│   ├── models.py
+│   ├── validators_ext.py
+│   └── templates/
+├── database.sql
+├── Makefile
+├── pyproject.toml
+└── README.md
+```
