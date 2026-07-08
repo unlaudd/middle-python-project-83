@@ -35,17 +35,21 @@ def validate_url(url):
         >>> validate_url("not-a-url")
         (False, "Некорректный URL")
     """
-    if not url:
-        return False, "URL не может быть пустым"
+    try:
+        if not url:
+            return False, "URL не может быть пустым"
 
-    if len(url) > 255:
-        return False, "URL не должен превышать 255 символов"
+        if len(url) > 255:
+            return False, "URL не должен превышать 255 символов"
 
-    if not validators.url(url):
+        if not validators.url(url):
+            return False, "Некорректный URL"
+
+        # Normalize URL to scheme + netloc
+        parsed = urlparse(url)
+        normalized_url = f"{parsed.scheme}://{parsed.netloc}"
+
+        return True, normalized_url
+
+    except Exception:
         return False, "Некорректный URL"
-
-    # Normalize URL to scheme + netloc
-    parsed = urlparse(url)
-    normalized_url = f"{parsed.scheme}://{parsed.netloc}"
-
-    return True, normalized_url
