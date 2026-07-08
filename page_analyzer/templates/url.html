@@ -44,9 +44,9 @@
         <tr>
             <td>{{ check.id }}</td>
             <td>{{ check.status_code if check.status_code else '' }}</td>
-            <td>{{ check.h1 if check.h1 else '' }}</td>
-            <td>{{ check.title if check.title else '' }}</td>
-            <td>{{ check.description if check.description else '' }}</td>
+            <td>{{ (check.h1[:200] + '...') if check.h1 and check.h1|length > 200 else (check.h1 if check.h1 else '') }}</td>
+            <td>{{ (check.title[:200] + '...') if check.title and check.title|length > 200 else (check.title if check.title else '') }}</td>
+            <td>{{ (check.description[:200] + '...') if check.description and check.description|length > 200 else (check.description if check.description else '') }}</td>
             <td>{{ check.created_at }}</td>
         </tr>
         {% else %}

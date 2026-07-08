@@ -75,16 +75,19 @@ def get_url_by_name(name):
     return None
 
 
-def add_check(url_id, status_code=None):
+def add_check(url_id, status_code=None, h1=None, title=None,
+              description=None):
     """Добавить проверку. Возвращает ID созданной проверки"""
     conn = get_db_connection()
     try:
         with conn.cursor() as cur:
             cur.execute('''
-                INSERT INTO url_checks (url_id, status_code, created_at)
-                VALUES (%s, %s, %s)
+                INSERT INTO url_checks
+                (url_id, status_code, h1, title, description, created_at)
+                VALUES (%s, %s, %s, %s, %s, %s)
                 RETURNING id
-            ''', (url_id, status_code, datetime.now().date()))
+            ''', (url_id, status_code, h1, title, description,
+                  datetime.now().date()))
             row = cur.fetchone()
         conn.commit()
         conn.close()

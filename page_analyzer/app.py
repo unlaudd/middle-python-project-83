@@ -78,10 +78,14 @@ def create_check(url_id):
         flash('Страница не найдена', 'danger')
         return redirect(url_for('show_urls'))
 
-    success, status_code = check_url(url_data['name'])
+    success, status_code, h1, title, description = check_url(
+        url_data['name']
+    )
 
     if success:
-        check_id = add_check(url_id, status_code)
+        check_id = add_check(
+            url_id, status_code, h1, title, description
+        )
         if check_id:
             flash('Страница успешно проверена', 'success')
         else:
