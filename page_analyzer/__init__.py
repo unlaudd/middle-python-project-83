@@ -13,7 +13,7 @@ imported directly from this package:
 Usage:
     Development:
         $ make dev
-    
+
     Production:
         $ make start
 

@@ -234,7 +234,8 @@ def get_urls_with_last_check():
                    - name (str): URL address
                    - created_at (date): URL creation date
                    - last_check (date): Date of last check (or None)
-                   - last_status_code (int): Status code of last check (or None)
+                   - last_status_code (int): Status code of last
+                     check (or None)
     """
     conn = get_db_connection()
     with conn.cursor() as cur:

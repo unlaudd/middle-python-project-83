@@ -44,7 +44,7 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'super_secret_default_key')
 def index():
     """
     Render the home page with URL submission form.
-    
+
     Returns:
         str: Rendered HTML template for the home page
     """
@@ -55,11 +55,11 @@ def index():
 def add_url_route():
     """
     Handle URL submission from the home page form.
-    
+
     Validates the submitted URL, checks for duplicates, and adds
     new URLs to the database. Displays appropriate flash messages
     for success, duplicate, or validation errors.
-    
+
     Returns:
         Response: Redirect to URL details page on success,
                  or rendered template with error message
@@ -92,11 +92,11 @@ def add_url_route():
 def show_urls():
     """
     Display list of all analyzed URLs with their last check information.
-    
+
     Retrieves all URLs from the database along with their most recent
     check date and status code, sorted by ID in descending order
     (newest first).
-    
+
     Returns:
         str: Rendered HTML template showing all URLs
     """
@@ -108,13 +108,13 @@ def show_urls():
 def show_url(url_id):
     """
     Display detailed information about a specific URL and its checks.
-    
+
     Shows URL metadata and all associated checks with their results
     (status code, h1, title, description).
-    
+
     Args:
         url_id (int): The ID of the URL to display
-        
+
     Returns:
         Response: Redirect to URLs list if not found,
                  or rendered template with URL details and checks
@@ -133,14 +133,14 @@ def show_url(url_id):
 def create_check(url_id):
     """
     Create a new check for the specified URL.
-    
+
     Performs an HTTP request to the URL, extracts SEO metadata
     (h1, title, description), and stores the results in the database.
     Only creates a check record if the HTTP request is successful.
-    
+
     Args:
         url_id (int): The ID of the URL to check
-        
+
     Returns:
         Response: Redirect to URL details page with flash message
                  indicating success or failure
