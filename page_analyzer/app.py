@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
+from .checker import check_url
 from .models import (
     add_url,
     get_url_by_id,
@@ -33,13 +34,11 @@ def add_url_route():
         flash(result, 'danger')
         return render_template('index.html'), 422
 
-    # Проверяем, существует ли уже такой URL
     existing_url = get_url_by_name(result)
     if existing_url:
         flash('Страница уже существует!', 'info')
         return redirect(url_for('show_url', url_id=existing_url['id']))
 
-    # Добавляем URL
     url_id = add_url(result)
 
     if url_id:
@@ -79,10 +78,14 @@ def create_check(url_id):
         flash('Страница не найдена', 'danger')
         return redirect(url_for('show_urls'))
 
-    check_id = add_check(url_id)
+    success, status_code = check_url(url_data['name'])
 
-    if check_id:
-        flash('Страница успешно проверена', 'success')
+    if success:
+        check_id = add_check(url_id, status_code)
+        if check_id:
+            flash('Страница успешно проверена', 'success')
+        else:
+            flash('Произошла ошибка при проверке', 'danger')
     else:
         flash('Произошла ошибка при проверке', 'danger')
 

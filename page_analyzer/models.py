@@ -75,16 +75,16 @@ def get_url_by_name(name):
     return None
 
 
-def add_check(url_id):
+def add_check(url_id, status_code=None):
     """Добавить проверку. Возвращает ID созданной проверки"""
     conn = get_db_connection()
     try:
         with conn.cursor() as cur:
             cur.execute('''
-                INSERT INTO url_checks (url_id, created_at)
-                VALUES (%s, %s)
+                INSERT INTO url_checks (url_id, status_code, created_at)
+                VALUES (%s, %s, %s)
                 RETURNING id
-            ''', (url_id, datetime.now().date()))
+            ''', (url_id, status_code, datetime.now().date()))
             row = cur.fetchone()
         conn.commit()
         conn.close()
@@ -137,7 +137,7 @@ def get_last_check_date(url_id):
 
 
 def get_urls_with_last_check():
-    """Получить все URL с датой последней проверки"""
+    """Получить все URL с датой и статусом последней проверки"""
     conn = get_db_connection()
     with conn.cursor() as cur:
         cur.execute('''
@@ -145,10 +145,15 @@ def get_urls_with_last_check():
                 u.id,
                 u.name,
                 u.created_at,
-                MAX(uc.created_at) as last_check
+                (SELECT created_at
+                 FROM url_checks
+                 WHERE url_id = u.id
+                 ORDER BY id DESC LIMIT 1) as last_check,
+                (SELECT status_code
+                 FROM url_checks
+                 WHERE url_id = u.id
+                 ORDER BY id DESC LIMIT 1) as last_status_code
             FROM urls u
-            LEFT JOIN url_checks uc ON u.id = uc.url_id
-            GROUP BY u.id, u.name, u.created_at
             ORDER BY u.id DESC
         ''')
         rows = cur.fetchall()
@@ -159,7 +164,8 @@ def get_urls_with_last_check():
             'id': row[0],
             'name': row[1],
             'created_at': row[2],
-            'last_check': row[3]
+            'last_check': row[3],
+            'last_status_code': row[4]
         }
         for row in rows
     ]
