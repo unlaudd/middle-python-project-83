@@ -1,3 +1,11 @@
+"""
+Database connection and initialization module.
+
+This module handles the connection to the PostgreSQL database
+using the DATABASE_URL environment variable. It also provides
+a helper function to initialize the database schema locally.
+"""
+
 import os
 import psycopg
 from dotenv import load_dotenv
@@ -8,12 +16,23 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 
 
 def get_db_connection():
-    """Получить соединение с базой данных"""
+    """
+    Establish and return a connection to the PostgreSQL database.
+
+    Returns:
+        psycopg.Connection: An active database connection instance.
+    """
     return psycopg.connect(DATABASE_URL)
 
 
 def init_db():
-    """Инициализация базы данных (для локальной разработки)"""
+    """
+    Initialize the database schema for local development.
+
+    Creates the 'urls' and 'url_checks' tables if they do not
+    already exist. In production, schema migrations are handled
+    via the database.sql script during the build process.
+    """
     conn = get_db_connection()
     with conn.cursor() as cur:
         cur.execute('''

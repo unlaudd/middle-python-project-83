@@ -1,11 +1,33 @@
+"""
+URL checker and SEO metadata extractor.
+
+This module provides functionality to fetch web pages and extract
+basic SEO-related metadata such as the page title, main heading (h1),
+and meta description. It handles network errors gracefully.
+"""
+
 import requests
 from bs4 import BeautifulSoup
 
 
 def check_url(url):
     """
-    Выполнить проверку URL.
-    Возвращает кортеж (success, status_code, h1, title, description)
+    Fetch a URL and extract SEO metadata.
+
+    Performs an HTTP GET request to the specified URL and parses
+    the HTML response to extract the title, h1 tag, and meta
+    description.
+
+    Args:
+        url (str): The URL to check and analyze.
+
+    Returns:
+        tuple: A tuple containing:
+            success (bool): True if the request was successful (2xx).
+            status_code (int): HTTP response code, or None on error.
+            h1 (str): Text of the first h1 tag, or None.
+            title (str): Text of the title tag, or None.
+            description (str): Content of meta description, or None.
     """
     try:
         response = requests.get(url, timeout=5)

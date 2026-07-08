@@ -1,11 +1,39 @@
+"""
+URL validation and normalization utilities.
+
+This module provides functions to validate and normalize URLs before
+storing them in the database. It ensures URLs are properly formatted
+and extracts the base URL (scheme + netloc) for consistency.
+"""
+
 import validators
 from urllib.parse import urlparse
 
 
 def validate_url(url):
     """
-    Валидация URL.
-    Возвращает кортеж (is_valid, normalized_url_or_error)
+    Validate and normalize a URL.
+
+    Checks if the URL is non-empty, within length limits, and properly
+    formatted. If valid, normalizes it to scheme + netloc format.
+
+    Args:
+        url (str): The URL string to validate.
+
+    Returns:
+        tuple: A tuple containing:
+            is_valid (bool): True if URL is valid, False otherwise.
+            result (str): Normalized URL if valid, or error message if invalid.
+
+    Examples:
+        >>> validate_url("https://example.com/path")
+        (True, "https://example.com")
+
+        >>> validate_url("")
+        (False, "URL не может быть пустым")
+
+        >>> validate_url("not-a-url")
+        (False, "Некорректный URL")
     """
     if not url:
         return False, "URL не может быть пустым"
@@ -16,7 +44,7 @@ def validate_url(url):
     if not validators.url(url):
         return False, "Некорректный URL"
 
-    # Нормализация URL
+    # Normalize URL to scheme + netloc
     parsed = urlparse(url)
     normalized_url = f"{parsed.scheme}://{parsed.netloc}"
 

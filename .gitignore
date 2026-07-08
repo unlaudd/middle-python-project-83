@@ -1,6 +1,80 @@
+# =============================================================================
+# Page Analyzer - Git Ignore Rules
+# =============================================================================
+# This file specifies intentionally untracked files that Git should ignore.
+# Learn more at https://git-scm.com/docs/gitignore
+
+# -----------------------------------------------------------------------------
+# Python bytecode and cache
+# -----------------------------------------------------------------------------
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# -----------------------------------------------------------------------------
+# Environment variables
+# -----------------------------------------------------------------------------
+# Local environment configuration containing secrets and credentials.
+# These must NEVER be committed to the repository.
 .env
+
+# -----------------------------------------------------------------------------
+# Virtual environments
+# -----------------------------------------------------------------------------
+# Python virtual environment directory used by uv and venv
 .venv/
+
+# -----------------------------------------------------------------------------
+# Python version pinning
+# -----------------------------------------------------------------------------
+# File created by uv to pin Python version.
+# Removed from repository to avoid deployment issues on Render.com.
 .python-version
+
+# -----------------------------------------------------------------------------
+# Distribution / packaging
+# -----------------------------------------------------------------------------
+# Build artifacts and distribution packages
+build/
+dist/
+*.egg-info/
+*.egg
+
+# -----------------------------------------------------------------------------
+# Testing and coverage
+# -----------------------------------------------------------------------------
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.pytest_cache/
+
+# -----------------------------------------------------------------------------
+# IDE and editor files
+# -----------------------------------------------------------------------------
+# IDE-specific files (VS Code, PyCharm, Vim, etc.)
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# -----------------------------------------------------------------------------
+# OS generated files
+# -----------------------------------------------------------------------------
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
