@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Сайт: {{ url_data.name }}{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">Сайт: {{ url_data.name }}</h1>
+
+<table class="table table-bordered" data-test="url">
+    <tbody>
+        <tr>
+            <th style="width: 40%">ID</th>
+            <td>{{ url_data.id }}</td>
+        </tr>
+        <tr>
+            <th>Имя</th>
+            <td>{{ url_data.name }}</td>
+        </tr>
+        <tr>
+            <th>Дата создания</th>
+            <td>{{ url_data.created_at }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 class="mt-5 mb-4">Проверки</h2>
+
+<button class="btn btn-primary mb-4">Запустить проверку</button>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Код ответа</th>
+            <th>h1</th>
+            <th>title</th>
+            <th>description</th>
+            <th>Дата создания</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="6">Нет данных</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

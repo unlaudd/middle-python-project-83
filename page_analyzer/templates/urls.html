@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Сайты{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">Сайты</h1>
+
+<table class="table table-bordered" data-test="urls">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Последняя проверка</th>
+            <th>Код ответа</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for url in urls %}
+        <tr>
+            <td>{{ url.id }}</td>
+            <td><a href="{{ url_for('show_url', url_id=url.id) }}">{{ url.name }}</a></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4">Нет добавленных сайтов</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
