@@ -24,9 +24,11 @@
 
 <h2 class="mt-5 mb-4">Проверки</h2>
 
-<button class="btn btn-primary mb-4">Запустить проверку</button>
+<form method="post" action="{{ url_for('create_check', url_id=url_data.id) }}">
+    <button type="submit" class="btn btn-primary mb-4">Запустить проверку</button>
+</form>
 
-<table class="table table-bordered">
+<table class="table table-bordered" data-test="checks">
     <thead>
         <tr>
             <th>ID</th>
@@ -38,9 +40,20 @@
         </tr>
     </thead>
     <tbody>
+        {% for check in checks %}
+        <tr>
+            <td>{{ check.id }}</td>
+            <td>{{ check.status_code if check.status_code else '' }}</td>
+            <td>{{ check.h1 if check.h1 else '' }}</td>
+            <td>{{ check.title if check.title else '' }}</td>
+            <td>{{ check.description if check.description else '' }}</td>
+            <td>{{ check.created_at }}</td>
+        </tr>
+        {% else %}
         <tr>
             <td colspan="6">Нет данных</td>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
 {% endblock %}

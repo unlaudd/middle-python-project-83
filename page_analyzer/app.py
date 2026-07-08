@@ -1,7 +1,14 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
-from .models import add_url, get_all_urls, get_url_by_id, get_url_by_name
+from .models import (
+    add_url,
+    get_url_by_id,
+    get_url_by_name,
+    add_check,
+    get_checks_by_url_id,
+    get_urls_with_last_check,
+)
 from .validators_ext import validate_url
 
 load_dotenv()
@@ -46,7 +53,7 @@ def add_url_route():
 @app.route('/urls')
 def show_urls():
     """Показать все URL"""
-    urls = get_all_urls()
+    urls = get_urls_with_last_check()
     return render_template('urls.html', urls=urls)
 
 
@@ -59,4 +66,24 @@ def show_url(url_id):
         flash('Страница не найдена', 'danger')
         return redirect(url_for('show_urls'))
 
-    return render_template('url.html', url_data=url_data)
+    checks = get_checks_by_url_id(url_id)
+    return render_template('url.html', url_data=url_data, checks=checks)
+
+
+@app.post('/urls/<int:url_id>/checks')
+def create_check(url_id):
+    """Создать проверку для URL"""
+    url_data = get_url_by_id(url_id)
+
+    if not url_data:
+        flash('Страница не найдена', 'danger')
+        return redirect(url_for('show_urls'))
+
+    check_id = add_check(url_id)
+
+    if check_id:
+        flash('Страница успешно проверена', 'success')
+    else:
+        flash('Произошла ошибка при проверке', 'danger')
+
+    return redirect(url_for('show_url', url_id=url_id))
