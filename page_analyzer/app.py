@@ -40,62 +40,50 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'super_secret_default_key')
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     """
-    Render the home page with URL submission form.
+    Render the home page and handle URL submission.
+
+    GET: Render the home page with URL submission form.
+    POST: Validate and add URL to database.
 
     Returns:
         str: Rendered HTML template for the home page
+        int: HTTP status code (422 for validation errors)
     """
+    if request.method == 'POST':
+        url = request.form.get('url', '').strip()
+
+        is_valid, result = validate_url(url)
+
+        if not is_valid:
+            flash(result, 'danger')
+            return render_template('index.html'), 422
+
+        existing_url = get_url_by_name(result)
+        if existing_url:
+            flash('Страница уже существует!', 'info')
+            return redirect(
+                url_for('show_url', url_id=existing_url['id'])
+            )
+
+        url_id = add_url(result)
+
+        if url_id:
+            flash('Страница успешно добавлена', 'success')
+            return redirect(url_for('show_url', url_id=url_id))
+        else:
+            flash('Ошибка при добавлении страницы', 'danger')
+            return render_template('index.html'), 500
+
     return render_template('index.html')
-
-
-@app.post('/')
-def add_url_route():
-    """
-    Handle URL submission from the home page form.
-
-    Validates the submitted URL, checks for duplicates, and adds
-    new URLs to the database. Displays appropriate flash messages
-    for success, duplicate, or validation errors.
-
-    Returns:
-        Response: Redirect to URL details page on success,
-                 or rendered template with error message
-        int: HTTP status code (422 for validation errors, 500 for DB errors)
-    """
-    url = request.form.get('url', '').strip()
-
-    is_valid, result = validate_url(url)
-
-    if not is_valid:
-        flash(result, 'danger')
-        return render_template('index.html'), 422
-
-    existing_url = get_url_by_name(result)
-    if existing_url:
-        flash('Страница уже существует!', 'info')
-        return redirect(url_for('show_url', url_id=existing_url['id']))
-
-    url_id = add_url(result)
-
-    if url_id:
-        flash('Страница успешно добавлена', 'success')
-        return redirect(url_for('show_url', url_id=url_id))
-    else:
-        flash('Ошибка при добавлении страницы', 'danger')
-        return render_template('index.html'), 500
 
 
 @app.route('/urls')
 def show_urls():
     """
-    Display list of all analyzed URLs with their last check information.
-
-    Retrieves all URLs from the database along with their most recent
-    check date and status code, sorted by ID in descending order
-    (newest first).
+    Display list of all analyzed URLs with their last check info.
 
     Returns:
         str: Rendered HTML template showing all URLs
@@ -108,9 +96,6 @@ def show_urls():
 def show_url(url_id):
     """
     Display detailed information about a specific URL and its checks.
-
-    Shows URL metadata and all associated checks with their results
-    (status code, h1, title, description).
 
     Args:
         url_id (int): The ID of the URL to display
@@ -134,16 +119,11 @@ def create_check(url_id):
     """
     Create a new check for the specified URL.
 
-    Performs an HTTP request to the URL, extracts SEO metadata
-    (h1, title, description), and stores the results in the database.
-    Only creates a check record if the HTTP request is successful.
-
     Args:
         url_id (int): The ID of the URL to check
 
     Returns:
         Response: Redirect to URL details page with flash message
-                 indicating success or failure
     """
     url_data = get_url_by_id(url_id)
 
