@@ -14,8 +14,13 @@
                 
                 <form method="POST" action="{{ url_for('add_url_route') }}">
                     <div class="input-group input-group-lg">
-                        <input type="url" name="url" class="form-control" 
+                        <!-- Добавлен label для доступности (a11y) -->
+                        <label for="url-input" class="visually-hidden">URL сайта</label>
+                        
+                        <!-- Добавлен id, связанный с label -->
+                        <input type="url" id="url-input" name="url" class="form-control" 
                                placeholder="https://www.example.com" required>
+                               
                         <button class="btn btn-primary px-4" type="submit">
                             ПРОВЕРИТЬ
                         </button>
